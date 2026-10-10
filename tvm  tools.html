@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TMV Console Terminal</title>
+    <style>
+        body {
+            background-color: #000000;
+            color: #ffffff;
+            font-family: 'Courier New', Courier, monospace;
+            padding: 30px;
+            margin: 0;
+            font-size: 14px;
+            line-height: 1.4;
+            box-sizing: border-box;
+        }
+
+        .app-title {
+            font-size: 16px;
+            font-weight: bold;
+            margin-bottom: 20px;
+            letter-spacing: 0.5px;
+            color: #ffffff;
+        }
+
+        .brand-header {
+            font-family: monospace;
+            white-space: pre;
+            font-size: 15px;
+            line-height: 1.1;
+            font-weight: bold;
+            margin-bottom: 5px;
+            color: #ffffff;
+        }
+
+        .brand-sub {
+            font-size: 11px;
+            color: #ffffff;
+            margin-bottom: 25px;
+        }
+
+        .terminal-divider {
+            border: none;
+            border-top: 1px dashed #ffffff;
+            margin: 15px 0;
+            width: 100%;
+        }
+
+        .parameter-list {
+            margin: 20px 0;
+            color: #ffffff;
+        }
+
+        .param-row {
+            margin: 6px 0;
+        }
+
+        .arrow-accent {
+            color: #ffffff;
+            margin-right: 8px;
+        }
+
+        .param-label {
+            font-weight: bold;
+            display: inline-block;
+            width: 90px;
+        }
+
+        .param-value {
+            color: #ffffff;
+        }
+
+        .console-log-area {
+            margin-top: 25px;
+            white-space: pre-wrap;
+            color: #ffffff;
+        }
+
+        .log-line {
+            margin-bottom: 5px;
+            display: flex;
+            gap: 10px;
+        }
+
+        .prefix-tag {
+            color: #ffffff;
+            min-width: 50px;
+        }
+
+        .timestamp-tag {
+            color: #ffffff;
+            min-width: 95px;
+        }
+
+        .text-message {
+            flex-grow: 1;
+        }
+
+        .text-white {
+            color: #ffffff;
+        }
+
+        .text-red {
+            color: #ff4444;
+        }
+
+        .text-success {
+            color: #55ff55;
+            font-weight: bold;
+        }
+
+        .input-container {
+            margin-top: 30px;
+            display: flex;
+            align-items: center;
+        }
+
+        .input-prompt-root {
+            color: #ffffff;
+            margin-right: 8px;
+            font-weight: bold;
+            user-select: none;
+        }
+
+        input[type="text"] {
+            background: transparent;
+            border: none;
+            color: #ffffff;
+            font-family: inherit;
+            font-size: 14px;
+            flex-grow: 1;
+            outline: none;
+            padding: 0;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="app-title">TMV Network Diagnostics Terminal v3.1</div>
+    
+    <div class="brand-header">████████╗███╗   ███╗██╗   ██╗
+╚══██╔══╝████╗ ████║██║   ██║
+   ██║   ██╔████╔██║██║   ██║
+   ██║   ██║╚██╔╝██║╚██╗ ██╔╝
+   ██║   ██║ ╚═╝ ██║ ╚████╔╝ 
+   ╚═╝   ╚═╝     ╚═╝  ╚═══╝  </div>
+    <div class="brand-sub">v3.1</div>
+    
+    <div class="terminal-divider"></div>
+
+    <div class="parameter-list" id="param-block">
+        <div class="param-row"><span class="arrow-accent">-&gt;</span> <span class="param-label">Target</span> : <span class="param-value">None</span></div>
+        <div class="param-row"><span class="arrow-accent">-&gt;</span> <span class="param-label">Time</span>   : 100</div>
+        <div class="param-row"><span class="arrow-accent">-&gt;</span> <span class="param-label">Rate</span>   : 30</div>
+        <div class="param-row"><span class="arrow-accent">-&gt;</span> <span class="param-label">Thread</span> : 10</div>
+        <div class="param-row"><span class="arrow-accent">-&gt;</span> <span class="param-label">LogFile</span>: system.txt</div>
+    </div>
+
+    <div class="terminal-divider"></div>
+
+    <div class="console-log-area" id="log-viewport">Awaiting target system parameters...</div>
+
+    <div class="input-container">
+        <span class="input-prompt-root">root@tmv:~#</span>
+        <input type="text" id="target-field" placeholder="run diagnostics [url or username]" autofocus autocomplete="off">
+    </div>
+
+<script>
+    const targetField = document.getElementById('target-field');
+    const logViewport = document.getElementById('log-viewport');
+    const paramBlock = document.getElementById('param-block');
+    let routineInterval;
+
+    const computerLogLines = [
+        { text: "Initializing asynchronous task tracking protocols...", type: "text-white" },
+        { text: "Resolving server routing table matrix entries...", type: "text-white" },
+        { text: "Hooking local console process entry points...", type: "text-white" },
+        { text: "Querying active network memory allocation registries...", type: "text-white" },
+        { text: "Warning: Route validation query timed out on node 4", type: "text-red" },
+        { text: "Error: Handshake response unreadable at memory address 0x7FFF4E", type: "text-red" },
+        { text: "Attempting automated interface pathway recovery procedures...", type: "text-white" },
+        { text: "Re-routing validation queries via backup proxy gateways...", type: "text-white" },
+        { text: "Packet sequence synchronization status: [PENDING]", type: "text-white" },
+        { text: "Warning: High network jitter detected on connection bridge 2", type: "text-red" },
+        { text: "Packet sequence index validation: [NOMINAL]", type: "text-white" },
+        { text: "Establishing temporary session instance validation loops...", type: "text-white" },
+        { text: "Alert: Structural latency variance detected on worker pipeline 7", type: "text-red" },
+        { text: "Critical: Target response packet drop rate reached 15%", type: "text-red" },
+        { text: "Compiling active operational monitoring metrics...", type: "text-white" },
+        { text: "Synchronizing system core clock telemetry records...", type: "text-white" },
+        { text: "Validating environment profile credential signatures...", type: "text-white" }
+    ];
+
+    function generateTimestamp() {
+        const date = new Date();
+        return date.toTimeString().split(' ');
+    }
+
+    targetField.addEventListener('keydown', function(event) {
+        if (event.key === 'Enter') {
+            const rawInput = targetField.value.trim();
+            if (!rawInput) return;
+
+            clearInterval(routineInterval);
+            logViewport.innerHTML = '';
+
+            const historyLine = document.createElement('div');
+            historyLine.className = 'log-line';
+            historyLine.innerHTML = `<span class="text-white" style="font-weight: bold;">root@tmv:~# ${rawInput}</span>`;
+            logViewport.appendChild(historyLine);
+
+            paramBlock.innerHTML = `
+                <div class="param-row"><span class="arrow-accent">-&gt;</span> <span class="param-label">Target</span> : <span class="param-value">${rawInput}</span></div>
+                <div class="param-row"><span class="arrow-accent">-&gt;</span> <span class="param-label">Time</span>   : 100</div>
+                <div class="param-row"><span class="arrow-accent">-&gt;</span> <span class="param-label">Rate</span>   : 30</div>
+                <div class="param-row"><span class="arrow-accent">-&gt;</span> <span class="param-label">Thread</span> : 10</div>
+                <div class="param-row"><span class="arrow-accent">-&gt;</span> <span class="param-label">LogFile</span>: system.txt</div>
+            `;
+
+            targetField.value = '';
+            
+            setTimeout(runTerminalSequence, 300);
+        }
+    });
+
+    function runTerminalSequence() {
+        let lineIndex = 0;
+        
+        routineInterval = setInterval(() => {
+            if (lineIndex < computerLogLines.length) {
+                const currentLine = computerLogLines[lineIndex];
+                printLogLine(`[TMV]`, `(${generateTimestamp()})`, `&gt; ${currentLine.text}`, currentLine.type);
+                lineIndex++;
+            } else {
+                clearInterval(routineInterval);
+                printLogLine(`[TMV]`, `(${generateTimestamp()})`, `SUCCESS`, 'text-success');
+            }
+        }, 220);
+    }
+
+    function printLogLine(prefix, time, message, customClass) {
+        const line = document.createElement('div');
+        line.className = 'log-line';
+        line.innerHTML = `
+            <span class="prefix-tag">${prefix}</span> 
+            <span class="timestamp-tag">${time}</span> 
+            <span class="text-message ${customClass}">${message}</span>
+        `;
+        logViewport.appendChild(line);
+        window.scrollTo(0, document.body.scrollHeight);
+    }
+</script>
+
+</body>
+</html>
