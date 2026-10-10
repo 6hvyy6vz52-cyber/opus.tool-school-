@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>r.dancy-admin@opus:~</title>
+    <style>
+        /* Global body setup to simulate a full desktop terminal environment */
+        body {
+            background-color: #1c1c1e;
+            color: #ffffff;
+            font-family: Menlo, Monaco, Consolas, "Courier New", monospace;
+            font-size: 13px;
+            line-height: 1.35;
+            padding: 20px;
+            margin: 0;
+            min-height: 100vh;
+            box-sizing: border-box;
+            white-space: pre-wrap; /* Keeps ASCII formatting and single flow intact */
+        }
+
+        /* Container keeping everything in one text stream */
+        .terminal-stream {
+            display: inline;
+        }
+
+        /* Active prompt entry block inside the text flow */
+        .prompt-line {
+            display: inline-flex;
+            align-items: center;
+            vertical-align: top;
+        }
+
+        .terminal-input {
+            background: transparent;
+            border: none;
+            color: #ffffff;
+            font-family: Menlo, Monaco, Consolas, "Courier New", monospace;
+            font-size: 13px;
+            outline: none;
+            padding: 0;
+            margin: 0 0 0 4px;
+            caret-color: #ffffff;
+            width: 250px;
+        }
+
+        /* Color accents for terminal outputs */
+        .success-text {
+            color: #00ff00;
+            font-weight: bold;
+        }
+        .warn-text {
+            color: #ffbd2e;
+        }
+        .info-text {
+            color: #5ac8fa;
+        }
+    </style>
+</head>
+<body>
+
+<div class="terminal-stream" id="log-history">Last login: Mon Oct 20 17:25:39 on ttys012
+r.dancy@A-NJ-r ~ % ssh r.dancy-admin@opus
+*********************************************************************************
+*                                                                               *
+*                                                                               *
+*          OOOOOOOOO                                                            *
+*        OO:::::::::OO                                                          *
+*      OO:::::::::::OO                                                          *
+*     OO:::OOOOO:::OO   Opppppppp   pppppppuuuuuuu   uuuuuuu    ssssssssss      *
+*     O::OOO     OOO:O  O::::::::::::::::p u::::u   u::::u  ss::::::::::s     *
+*     O:O         O:O  PP::::::PPPPP:::::pu::::u   u::::uus:::::::::::::s    *
+*     O:O         O:O    P::::P    P::::P u::::u   u::::u s::::::ssss:::::s  *
+*     O:O         O:O    P::::P    P::::P u::::u   u::::u  s:::::s  ssssss   *
+*     O:O         O:O    P::::P    P::::P u::::u   u::::u    s::::::s        *
+*     O:O         O:O    P::::P    P::::P u::::u   u::::u       s::::::s     *
+*     O:O         O:O    P::::P    P::::P u::::u   u::::u ssssss   s:::::s   *
+*     O::OOO     OOO:O  P::::PPPPP::::::p u::::uuu:::::uu s:::::ssss::::::s  *
+*      OO:::::::::::OO  P::::::::::::::::p u:::::::::::::::us::::::::::::::s   *
+*        OO:::::::::OO   P::::PPPPPPPPPPP   u:::::::::::::::u s:::::::::::ss    *
+*          OOOOOOOOO     P::::P              uuuuuuuuuuuuuuuu  sssssssssss      *
+*                      PP::::::PP                                               *
+*                      P::::::::P                                               *
+*                      P::::::::P                                               *
+*                      PPPPPPPPPP                                               *
+*                                                                               *
+*                                                                               *
+*  * This system is the property of Fairleigh Dickinson University and may be   *
+*  * accessed by the University at any time. Therefore no user should have any  *
+*  * expectation that information stored on, or transmitted through this computer*
+*  * is private.                                                                *
+*                                                                               *
+*  * Please remember that your use of the University's computers and other      *
+*  * electronic devices is subject to the terms of the University's Acceptable  *
+*  * Use Policy which can be found at                                           *
+*  *    https://it.fdu.edu/acceptable-use-policy-for-computer-usage/            *
+*                                                                               *
+*********************************************************************************
+
+(r.dancy-admin@opus) Password:
+(r.dancy-admin@opus) Duo two-factor login for r.dancy-admin
+
+Enter a passcode or select one of the following options:
+
+  1. Duo Push to XXX-XXX-1038
+  2. SMS passcodes to XXX-XXX-1038
+
+Passcode or option (1-2): 1
+Success. Logging you in...
+Last login: Wed Oct 22 11:36:47 2025 from 132.238.5.99
+
+Enter username to trace: </div><div class="prompt-line" id="interactive-prompt"><span class="prompt-text">opus:~ \$</span><input type="text" id="term-field" class="terminal-input" autofocus spellcheck="false"></div>
+
+<script>
+    const termField = document.getElementById('term-field');
+    const logHistory = document.getElementById('log-history');
+    const interactivePrompt = document.getElementById('interactive-prompt');
+
+    // Clicking anywhere on the screen targets the terminal field
+    document.addEventListener('click', () => {
+        termField.focus();
+    });
+
+    termField.addEventListener('keydown', function(e) {
+        if (e.key === 'Enter') {
+            const username = termField.value.trim();
+            if (username === '') return;
+
+            // Log the typed name directly into the page's single text flow
+            logHistory.innerHTML += ` ${username}\n`;
+            
+            // Hide the active input elements to let the script log continuously
+            interactivePrompt.style.display = 'none';
+            termField.value = '';
+
+            // Generating randomized visual values for the logs
+            const randInt = (min, max) => Math.floor(Math.random() * (max - min + 1)) + min;
+            const fakeIP = `${randInt(10, 240)}.${randInt(10, 240)}.${randInt(1, 254)}.${randInt(1, 254)}`;
+            const fakePID = randInt(1000, 9999);
+
+            const events = [
+                { string: `\n[!] Initializing tracking pipeline protocol...`, time: 200 },
+                { string: `[+] Spawned background worker process PID: ${fakePID}`, time: 400 },
+                { string: `[*] Resolving system routing vectors for query handle: "${username}"`, time: 700 },
+                { string: `[info] Mapping proxy relays: nodes 12.109.43.2 -> 88.21.144.90`, time: 1000 },
+                { string: `[*] Attempting handshake with remote directory server...`, time: 1400 },
+                { string: `  -> Handshake code: 0x4F2A (ACK_RECV)`, time: 1600 },
+                { string: `<span class="info-text">[info] Network attachment node detected at gateway: ${fakeIP}</span>`, time: 1900 },
+                { string: `[*] Injecting data matrix interceptor frames...`, time: 2300 },
+                { string: `    [====================] 25% complete`, time: 2500 },
+                { string: `    [========================================] 50% complete`, time: 2800 },
+                { string: `    [======================================================] 75% complete`, time: 3100 },
+                { string: `    [======================================================================] 100%`, time: 3300 },
+                { string: `[+] Sequence download pool stabilized. Extraction index table read successfully.`, time: 3700 },
+                { string: `<span class="warn-text">[!] Bypassing encryption layers for local container tables...</span>`, time: 4100 },
+                { string: `[*] Decompiling schema maps...`, time: 4500 },
+                { string: `<span class="success-text">[SUCCESS] user "${username}" profiles synchronized.</span>\n\n`, time: 5000 }
+            ];
+
+            // Append each simulation string line-by-line using structured intervals
+            events.forEach(ev => {
+                setTimeout(() => {
+                    logHistory.innerHTML += ev.string + '\n';
+                    window.scrollTo(0, document.body.scrollHeight);
+                }, ev.time);
+            });
+
+            // Re-render and attach the cursor line right behind the logged data
+            setTimeout(() => {
+                interactivePrompt.style.display = 'inline-flex';
+                termField.focus();
+                window.scrollTo(0, document.body.scrollHeight);
+            }, 5100);
+        }
+    });
+</script>
+
+</body>
+</html>
