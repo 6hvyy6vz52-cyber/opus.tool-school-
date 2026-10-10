@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>fsociety_terminal</title>
+    <style>
+        body, html {
+            margin: 0;
+            padding: 0;
+            background-color: #050505;
+            color: #ff0000;
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 14px;
+            width: 100%;
+            height: 100%;
+        }
+        #terminal {
+            padding: 20px;
+            width: 100%;
+            min-height: 100%;
+            box-sizing: border-box;
+        }
+        pre {
+            margin: 0;
+            white-space: pre-wrap;
+            color: #ff0000;
+            text-shadow: 0 0 5px rgba(255, 0, 0, 0.5);
+            font-size: 11px;
+            line-height: 1.1;
+        }
+        .separator-line {
+            color: #ff0000;
+            margin: 20px 0;
+            white-space: pre-wrap;
+            font-weight: bold;
+        }
+        .output-line {
+            margin-bottom: 5px;
+            white-space: pre-wrap;
+            color: #ff0000;
+        }
+        .input-line {
+            display: flex;
+            align-items: center;
+        }
+        .prompt {
+            color: #ff0000;
+            margin-right: 10px;
+        }
+        .cmd-input {
+            background: transparent;
+            border: none;
+            color: #ff0000;
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 14px;
+            outline: none;
+            flex-grow: 1;
+            padding: 0;
+            caret-color: #ff0000;
+        }
+        .hack-stream { 
+            color: #ff0000;
+            font-size: 12px; 
+            line-height: 1.2;
+        }
+    </style>
+</head>
+<body>
+
+<div id="terminal" onclick="document.getElementById('cmd').focus()">
+<pre>
+xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+xx                                                                        xx
+xx          MMMMMMMMMMMMssssssssssssssssssssssssss''''sssssMMMMMMMMM      xx
+xx        'MMMMMMMMMMMyy''                                ''yyyMMMMMMMy    xx
+xx       'MMMMMMyyyy'                                         'yyyyyMMMM   xx
+xx       MMMMMyy'                                                'yyyMMM   xx
+xx       MMMMy'                                                    'yMMM   xx
+xx       MMh'                                                        'hM   xx
+xx                                                                        xx
+xx     ::                                                          ::     xx
+xx    MMhh.           ..hhhhhhh..                  ..hhhhhhh..    .hhMM   xx
+xx   MMMMM... .hhhhMMdd::dhMMMMhhh...          ...hhhMMMMhd::ddMMhhhhMMM  xx
+xx   MMMMMM ...MMMM''      'mmMMMMM''          ''MMMMMmm'      ''MMMMMMM  xx
+xx   yyyym'    'mm'          'mhMM'              'MMhm'          'myyyy   xx
+xx   mMM'                      'M'                'M'                      xx
+xx   mm           y.      .yyyyy                        .yyyyy.      .y    xx
+xx               MN'    .sMMMMMMss.                  .sMMMMMMss.    NM     xx
+xx              'M'    .sMMNNNNNNMMs.              .sMMNNNNNNMMs.    M'    xx
+xx             o+ooo     +++++Mo                    oM+++++     ooo+o      xx
+xx                                                                        xx
+xx            oM                       ss                       Mo        xx
+xx           oMMo                      MM                      oMMo       xx
+xx          MMMM                       ss                       MMMM      xx
+xx         +MMMM+               +++++NNNNN+++++               +MMMM+      xx
+xx       ++MMMMMM++        ++++NNNNMMMMMMMMMNNNN++++        ++MMMMMM++    xx
+xx     +NNNMMMMMMMMMNNNNNNNMMMMMMMMMMMMMMMMMMMMMMMMMNNNNNNNMMMMMMMMMNNN+  xx
+xx    MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM   xx
+xx   yMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMy  xx
+xx  MMMMMM..yyMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM..MM  xx
+xx MMMMMM..  'yyhhhhh       odddo              obbbo       hhhhhyy'  ..MMMM xx
+xx MMMMd                     ..""MddddddddddddddM""..                     dMMMM xx
+xx MMMMd                       :ddMMMMMMMMMMMMMMdd:                       dMMMM xx
+xx MMMMM-                      ::ddMMMMMMMMMMMMdd::                      -MMMMM xx
+xx  MMMMMM-                      ::dddddddddd::                         -MMMMMM xx
+xx   MMMMMM.                                                           .MMMMMM  xx
+xx    MMMMMMMy                                                       yMMMMMMM   xx
+xx     MMMMMMMMy.                                                 .yMMMMMMMM    xx
+xx      MMMMMMMMMMy.                                           .yMMMMMMMMMM     xx
+xx       MMMMMMMMMMMMy.                                     .yMMMMMMMMMMMM      xx
+xx        MMMMMMMMMMMMMMss.                             .ssMMMMMMMMMMMMMM       xx
+xx         MMMMMMMMMMMMMMMNo           oNNNNNo         oNMMMMMMMMMMMMMMM        xx
+xx                                                                        xx
+xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+   .o88o.                                o8o                              
+  .888                                   `"'          .o8                 
+  888ooo   .ooooo.   .ooooo.   oooo d8b oooo  .ooooo.  .o888oo oooo    oooo 
+  888     d88' `88b d88' `"Y8  `888""8P `888 d88' `"Y8   888    `88.  .88'  
+  888     888   888 888         888      888 888         888     `88..88'   
+  888     888   888 888   .o8   888      888 888   .o8   888 .    `8888'    
+ o888o    `Y8bod8P' `Y8bod8P'  d888b    o888o`Y8bod8P'   "888"     `88'     
+                                                                .88'      
+                                                            .o..P'        
+                                                            `XERB'        
+</pre>
+
+    <div class="separator-line">----------------------------------------------------------------------------</div>
+
+    <div id="history">
+        <div class="output-line">Welcome to fsociety OS v4.0.1 LTS (x86_64-linux-gnu)</div>
+        <div class="output-line">Establishing secure shell interface link... Connected.</div>
+        <div class="output-line"></div>
+    </div>
+
+    <div class="input-line" id="prompt-container">
+        <span class="prompt">fsociety@elliot:~\$</span>
+        <input type="text" id="cmd" class="cmd-input" autofocus autocomplete="off" spellcheck="false" onkeydown="handleCommand(event)">
+    </div>
+</div>
+
+<script>
+    const cmdInput = document.getElementById('cmd');
+    const history = document.getElementById('history');
+    const promptContainer = document.getElementById('prompt-container');
+    let isHacking = false;
+
+    const logPhrases = [
+        "OVERWRITING LOCAL MEMORY SECTOR",
+        "BYPASSING ASYMMETRIC FIREWALL NODE",
+        "INJECTING BUFFER OVERFLOW FLOWABLE",
+        "ELEVATING CONSOLE ROOT ACCESS PRIVILEGES",
+        "SHREDDING INTRUSION DETECTION HOST LOGS",
+        "BROADCASTING CRYPTOGRAPHIC RELAY KEYS",
+        "CORRUPTING MASTER BOOT SECTOR PARTITIONS",
+        "DECRYPTING CORE ACCOUNT DATABASE MATRIX",
+        "TERMINATING REMOTE ADMIN CONSOLE CONNECTIONS",
+        "WIPING LOGICAL DISK MOUNT MODULES",
+        "EXTRACTING TARGET ROUTING IDENTIFIERS",
+        "INITIALIZING KERNEL PAYLOAD INJECTION"
+    ];
+
+    function addLine(text, className = '') {
+        const line = document.createElement('div');
+        line.className = `output-line ${className}`;
+        line.innerText = text;
+        history.appendChild(line);
+        window.scrollTo(0, document.body.scrollHeight);
+    }
+
+    function handleCommand(e) {
+        if (e.key === 'Enter') {
+            const inputVal = cmdInput.value; // Keeps exactly what was typed
+            
+            addLine(`fsociety@elliot:~$ ${inputVal}`);
+            cmdInput.value = '';
+
+            // Any input triggers the sequence now
+            startMassiveHack();
+        }
+    }
+
+    function startMassiveHack() {
+        isHacking = true;
+        promptContainer.style.display = 'none';
+        
+        let totalLinesGenerated = 0;
+        const targetLines = 1050; 
+        
+        const interval = setInterval(() => {
+            for(let i = 0; i < 15; i++) {
+                if (totalLinesGenerated >= targetLines) {
+                    break;
+                }
+
+                if (Math.random() > 0.5) {
+                    const randomPhrase = logPhrases[Math.floor(Math.random() * logPhrases.length)];
+                    addLine(`[+] SYSTEM_LOG: ${randomPhrase} ... [${Math.floor(Math.random() * 100)}%]`, 'hack-stream');
+                } else {
+                    let hexValue = "0x" + Math.floor(Math.random()*16777215).toString(16).toUpperCase().padStart(6, '0');
+                    let randomHash = Math.random().toString(36).substring(2, 12).toUpperCase();
+                    let memoryRange = "0x" + Math.floor(Math.random()*268435456).toString(16).toUpperCase().padStart(8, '0');
+                    addLine(`${hexValue}  --  ${randomHash}  --  ALLOC_MEM_BLOCK [${memoryRange}]`, 'hack-stream');
+                }
+                totalLinesGenerated++;
+            }
+
+            if (totalLinesGenerated >= targetLines) {
+                clearInterval(interval);
+                setTimeout(() => {
+                    addLine("[+] SUCCESS: OPERATION COMPLETE. ALL SYSTEMS WIPED.");
+                    
+                    promptContainer.style.display = 'flex';
+                    isHacking = false;
+                    window.scrollTo(0, document.body.scrollHeight);
+                    cmdInput.focus();
+                }, 400);
+            }
+        }, 20);
+    }
+</script>
+</body>
+</html>
