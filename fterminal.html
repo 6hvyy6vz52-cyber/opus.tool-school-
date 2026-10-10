@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Codex Web Terminal</title>
+    <style>
+        body, html {
+            margin: 0;
+            padding: 0;
+            background-color: #000000;
+            color: #ffffff;
+            font-family: 'Consolas', 'Courier New', Courier, monospace;
+            font-size: 16px;
+            height: 100%;
+            overflow: hidden;
+        }
+
+        #terminal {
+            padding: 20px;
+            height: calc(100% - 40px);
+            overflow-y: auto;
+            box-sizing: border-box;
+        }
+
+        .header-container {
+            display: flex;
+            align-items: center;
+            margin-bottom: 25px;
+        }
+
+        /* "CODEX" lettering layout entirely constructed using red 1s and 0s */
+        .codex-binary-banner {
+            color: #ff3333;
+            font-family: 'Consolas', 'Courier New', Courier, monospace;
+            font-size: 14px;
+            line-height: 1.2;
+            white-space: pre;
+            font-weight: bold;
+        }
+
+        .subtitle-line {
+            color: #ff3333;
+            font-family: 'Consolas', 'Courier New', Courier, monospace;
+            font-size: 14px;
+            margin-bottom: 25px;
+        }
+
+        .output-line {
+            margin: 0;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+            line-height: 1.4;
+        }
+
+        /* 500 lines of mixed network infrastructure logs streaming down in red */
+        .stream-line {
+            margin: 0;
+            color: #ff3333;
+            font-size: 14px;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+            line-height: 1.2;
+        }
+
+        .success-line {
+            margin: 10px 0;
+            color: #ff3333;
+            font-weight: bold;
+        }
+
+        .input-line {
+            display: flex;
+            align-items: center;
+            margin-top: 5px;
+        }
+
+        .prompt {
+            white-space: nowrap;
+            margin-right: 5px;
+        }
+
+        #cmd-input {
+            background: transparent;
+            border: none;
+            color: #ffffff;
+            font-family: 'Consolas', 'Courier New', Courier, monospace;
+            font-size: 16px;
+            flex-grow: 1;
+            outline: none;
+            padding: 0;
+            margin: 0;
+        }
+    </style>
+</head>
+<body>
+
+<div id="terminal">
+    <div class="header-container">
+        <!-- CODEX Text Logo made of 1s and 0s -->
+        <div class="codex-binary-banner">
+ 111111     000000    111111    00000000  11    11
+11    11   00    00   11    11  00         11  11 
+11         00    00   11    11  000000      1111  
+11    11   00    00   11    11  00         11  11 
+ 111111     000000    111111    00000000  11    11</div>
+    </div>
+
+    <div class="subtitle-line">codex terminal tools
+-------------------------------------------------------------------------</div>
+
+    <div id="output"></div>
+    
+    <div class="input-line" id="input-container">
+        <span class="prompt" id="prompt-label">user@codex-terminal:~\$</span>
+        <input type="text" id="cmd-input" autofocus autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false">
+    </div>
+</div>
+
+<script>
+    const input = document.getElementById('cmd-input');
+    const output = document.getElementById('output');
+    const promptLabel = document.getElementById('prompt-label');
+    const terminal = document.getElementById('terminal');
+    const inputContainer = document.getElementById('input-container');
+
+    // System text component pools for diverse log generation
+    const protocols = ["TCP", "UDP", "HTTP/2", "TLSv1.3", "SSH-2.0", "DNS", "DHCP", "FTP"];
+    const actions = ["CONNECT", "GET", "POST", "DISCONNECT", "TIMEOUT", "HANDSHAKE", "FORWARD", "LISTEN", "DROP"];
+    const components = ["CORE_NET", "SYS_DAEMON", "ROUTER_NODE", "AUTH_MOD", "PORT_MAP", "TRAFFIC_ENG"];
+    const hexChars = "0123456789ABCDEF";
+
+    // Generates complex lines with random IP addresses, hardware hashes, technical words, and diagnostic codes
+    function generateComputerStuffLine() {
+        const timestamp = new Date().toISOString().split('T')[1].slice(0, -1);
+        const protocol = protocols[Math.floor(Math.random() * protocols.length)];
+        const action = actions[Math.floor(Math.random() * actions.length)];
+        const comp = components[Math.floor(Math.random() * components.length)];
+        
+        // Random IP Address generation
+        const ip = `${Math.floor(Math.random() * 223) + 1}.${Math.floor(Math.random() * 255)}.${Math.floor(Math.random() * 255)}.${Math.floor(Math.random() * 254) + 1}`;
+        const port = Math.floor(Math.random() * 65535);
+        
+        // Random Hexadecimal Memory Token/Hardware Address
+        let hexToken = "";
+        for (let i = 0; i < 6; i++) {
+            hexToken += hexChars[Math.floor(Math.random() * 16)] + hexChars[Math.floor(Math.random() * 16)] + (i < 5 ? ":" : "");
+        }
+        
+        // Random Byte payload count
+        const bytes = Math.floor(Math.random() * 4096) + 64;
+
+        // Structured diagnostic format mapping multiple variable logs
+        return `[${timestamp}] [${comp}] ${protocol}_${action} -> ADDR: ${ip}:${port} | MAC: [${hexToken}] | PKT_SIZE: ${bytes} bytes | STREAM_ID: ${Math.floor(Math.random() * 90000) + 10000}`;
+    }
+
+    document.addEventListener('click', () => {
+        input.focus();
+    });
+
+    input.addEventListener('keydown', function(e) {
+        if (e.key === 'Enter') {
+            const currentInputValue = input.value;
+            
+            printLine(`${promptLabel.textContent} ${currentInputValue}`);
+            input.value = '';
+            
+            inputContainer.style.display = 'none';
+            
+            runDataStream(500);
+        }
+    });
+
+    function printLine(text) {
+        const p = document.createElement('p');
+        p.className = 'output-line';
+        p.textContent = text;
+        output.appendChild(p);
+        terminal.scrollTop = terminal.scrollHeight;
+    }
+
+    function runDataStream(totalLines) {
+        let linesRendered = 0;
+        const batchSize = 25;
+
+        function renderBatch() {
+            const fragment = document.createDocumentFragment();
+            
+            for (let i = 0; i < batchSize && linesRendered < totalLines; i++) {
+                const p = document.createElement('p');
+                p.className = 'stream-line';
+                p.textContent = generateComputerStuffLine();
+                fragment.appendChild(p);
+                linesRendered++;
+            }
+            
+            output.appendChild(fragment);
+            terminal.scrollTop = terminal.scrollHeight;
+
+            if (linesRendered < totalLines) {
+                requestAnimationFrame(renderBatch);
+            } else {
+                const successP = document.createElement('p');
+                successP.className = 'success-line';
+                successP.textContent = "success";
+                output.appendChild(successP);
+                
+                inputContainer.style.display = 'flex';
+                input.focus();
+                terminal.scrollTop = terminal.scrollHeight;
+            }
+        }
+
+        requestAnimationFrame(renderBatch);
+    }
+</script>
+
+</body>
+</html>
