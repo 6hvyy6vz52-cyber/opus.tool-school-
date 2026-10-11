@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>John the Ripper Terminal</title>
+    <style>
+        html, body {
+            background-color: #0c0c0c;
+            color: #4a0e4e; /* Dark Purple text for general terminal output */
+            font-family: 'Courier New', Courier, monospace;
+            padding: 20px;
+            margin: 0;
+            box-sizing: border-box;
+        }
+        #terminal-content {
+            max-width: 950px;
+            margin: 0; /* Aligned fully to the left side, no container box */
+        }
+        .ascii-art {
+            /* Linear gradient for a mix of green and blue */
+            background: linear-gradient(135deg, #00ff00, #00aaff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            white-space: pre;
+            font-weight: bold;
+            line-height: 1.2;
+            margin-bottom: 5px;
+        }
+        .dashed-separator {
+            color: #ff0000; /* Solid red dashed separator */
+            font-weight: bold;
+            margin-bottom: 20px;
+            white-space: pre;
+        }
+        #output {
+            white-space: pre-wrap;
+            margin-bottom: 15px;
+        }
+        .input-line {
+            display: flex;
+            align-items: center;
+        }
+        .prompt {
+            color: #00aaff;
+            margin-right: 10px;
+            font-weight: bold;
+        }
+        input {
+            background: transparent;
+            border: none;
+            color: #4a0e4e; /* Dark Purple text for user typing input */
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 16px;
+            flex-grow: 1;
+            outline: none;
+        }
+        .success {
+            color: #ffcc00;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+
+<div id="terminal-content">
+    <!-- ASCII Art Header displaying only xcrack with a green and blue mix -->
+    <div class="ascii-art">██╗  ██╗ ██████╗██████╗  █████╗  ██████╗██╗  ██╗
+╚██╗██╔╝██╔════╝██╔══██╗██╔══██╗██╔════╝██║ ██╔╝
+ ╚███╔╝ ██║     ██████╔╝███████║██║     █████╔╝ 
+ ██╔██╗ ██║     ██╔══██╗██╔══██║██║     ██╔═██╗ 
+██╔╝ ██╗╚██████╗██║  ██║██║  ██║╚██████╗██║  ██╗
+╚═╝  ╚═╝ ╚═════╝╚═╝  ╚═╝╚═╝  ╚═╝ ╚═════╝╚═╝  ╚═╝</div>
+
+    <!-- Red Dashed Separator Line starting precisely at the 'x' -->
+    <div class="dashed-separator">-----------------------------------------------</div>
+
+    <div id="output">John the Ripper Simulator v1.0.0
+Type anything and press Enter to simulate a password crack.
+
+</div>
+    <div class="input-line">
+        <span class="prompt">john@ripper:~\$</span>
+        <input type="text" id="cmd-input" autofocus autocomplete="off">
+    </div>
+</div>
+
+<script>
+    const input = document.getElementById('cmd-input');
+    const output = document.getElementById('output');
+
+    const chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#\$%^&*()_+-=";
+
+    function generateRandomPassword() {
+        let length = Math.floor(Math.random() * 6) + 8;
+        let password = "";
+        for (let i = 0; i < length; i++) {
+            password += chars.charAt(Math.floor(Math.random() * chars.length));
+        }
+        return password;
+    }
+
+    input.addEventListener('keydown', function(event) {
+        if (event.key === 'Enter') {
+            const userText = input.value;
+            
+            output.innerHTML += `<span class="prompt">john@ripper:~$</span> ${userText}\n`;
+            output.innerHTML += `Loaded 1 password hash (bcrypt) ...\n`;
+            output.innerHTML += `Remaining 1 password hash to crack ...\n`;
+            
+            const password = generateRandomPassword();
+            output.innerHTML += `<span class="success">Password cracked: ${password}</span>\n\n`;
+            
+            input.value = '';
+            window.scrollTo(0, document.body.scrollHeight);
+        }
+    });
+
+    // Clicking anywhere on the page keeps the cursor active in the input line
+    document.addEventListener('click', () => {
+        input.focus();
+    });
+</script>
+
+</body>
+</html>
