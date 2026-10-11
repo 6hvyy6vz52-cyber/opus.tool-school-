@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DDOS RIPPER Terminal</title>
+    <style>
+        /* Reset and enforce pitch-black terminal background */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        body, html {
+            background-color: #000000;
+            color: #9333ea; /* Purple for standard fallback text */
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 14px;
+            height: 100%;
+            overflow: hidden;
+        }
+
+        /* Container pinned tightly to the left side of the screen */
+        .terminal-container {
+            display: flex;
+            flex-direction: column;
+            width: 100%;
+            max-width: 800px; /* Limits width to keep the left-aligned terminal look */
+            height: 100%;
+            padding: 20px;
+            text-align: left;
+        }
+
+        /* Large custom ANSI-style text header with purple and green gradient */
+        .ascii-art {
+            background: linear-gradient(90deg, #b026ff, #00ff66, #bf40bf, #00ff00);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            white-space: pre;
+            font-weight: bold;
+            line-height: 1.2;
+            margin-bottom: 10px;
+            display: inline-block;
+        }
+
+        /* Red separator line matching your design constraints */
+        .separator {
+            color: #ff0000;
+            margin-bottom: 15px;
+            letter-spacing: -1px;
+            font-weight: bold;
+        }
+
+        /* Scrollable output window for terminal text logs */
+        .output-log {
+            flex-grow: 1;
+            overflow-y: auto;
+            margin-bottom: 5px;
+            padding-right: 10px;
+        }
+
+        /* Auto-scrolling utility styling */
+        .output-log::-webkit-scrollbar {
+            width: 6px;
+        }
+        .output-log::-webkit-scrollbar-thumb {
+            background-color: #333333;
+            border-radius: 3px;
+        }
+
+        /* Terminal line variations */
+        .log-entry {
+            margin-bottom: 4px;
+            white-space: pre-wrap;
+            word-break: break-all;
+            color: #9333ea; /* Purple for initialization message */
+        }
+        .log-entry.command-echo {
+            color: #701a75; /* Slightly dimmer purple for historical user entries */
+        }
+        /* Custom blue styling for logs generated upon pressing enter */
+        .log-entry.simulated-log {
+            color: #3b82f6;
+        }
+
+        /* Interactive input row placed right inside the content flow */
+        .input-line {
+            display: flex;
+            align-items: center;
+            margin-top: 5px;
+            margin-bottom: 15px;
+        }
+        .prompt-symbol {
+            color: #9333ea; /* Purple prompt symbol */
+            margin-right: 10px;
+            user-select: none;
+        }
+        .terminal-input {
+            background: transparent;
+            border: none;
+            color: #9333ea; /* Purple text inside the enter bar */
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 14px;
+            flex-grow: 1;
+            outline: none;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="terminal-container">
+        <!-- Custom text banner styled block layout with color gradient mixed in -->
+        <div class="ascii-art">██████╗ ██████╗  ██████╗ ███████╗    ██████╗ ██╗██████╗ ██████╗ ███████╗██████╗ 
+██╔══██╗██╔══██╗██╔═══██╗██╔════╝    ██╔══██╗██║██╔══██╗██╔══██╗██╔════╝██╔══██╗
+██║  ██║██║  ██║██║   ██║███████╗    ██████╔╝██║██████╔╝██████╔╝█████╗  ██████╔╝
+██║  ██║██║  ██║██║   ██║╚════██║    ██╔══██╗██║██╔═══╝ ██╔═══╝ ██╔══╝  ██╔══██╗
+██████╔╝██████╔╝╚██████╔╝███████║    ██║  ██║██║██║     ██║     ███████║██║  ██║
+╚═════╝ ╚═════╝  ╚═════╝ ╚══════╝    ╚═╝  ╚═╝╚═╝╚═╝     ╚═╝     ╚══════╝╚═╝  ╚═╝</div>
+        
+        <!-- Red Separator Line -->
+        <div class="separator">----------------------------------------------------------------------------------</div>
+        
+        <!-- Interactive Terminal Output Grid -->
+        <div class="output-log" id="outputLog">
+            <div class="log-entry">DDOS RIPPER Terminal System initialized. Ready for user input...</div>
+        </div>
+        
+        <!-- Command Prompt Field -->
+        <div class="input-line">
+            <span class="prompt-symbol">root@ripper:~#</span>
+            <input type="text" id="terminalInput" class="terminal-input" autofocus autocomplete="off" spellcheck="false">
+        </div>
+    </div>
+
+    <script>
+        const terminalInput = document.getElementById('terminalInput');
+        const outputLog = document.getElementById('outputLog');
+
+        // Pool of authentic technical strings to feed into the simulation sequence
+        const technicalPhrases = [
+            "Initializing handshake loop protocols...",
+            "Checking local integrity of network sockets...",
+            "Parsing header configurations and packet assembly schemas...",
+            "Establishing parallel processing lanes on dynamic virtual nodes...",
+            "Routing encryption parameters through secure secondary abstraction layers...",
+            "Synchronizing execution timeframes with high-precision internal oscillators...",
+            "Allocating buffer memory maps and assigning runtime task tokens...",
+            "Resolving network endpoints and optimizing delivery pipelines...",
+            "Testing network environment variables against standard performance baselines...",
+            "Injecting procedural monitoring hooks into active operational queues..."
+        ];
+
+        // Ensure user focus remains locked onto terminal input box during body clicks
+        document.body.addEventListener('click', () => {
+            terminalInput.focus();
+        });
+
+        terminalInput.addEventListener('keydown', function(e) {
+            if (e.key === 'Enter') {
+                const inputValue = this.value.trim();
+                if (inputValue === '') return;
+
+                // Move the entered command up into the permanent log output view
+                appendLog(`root@ripper:~# ${inputValue}`, 'command-echo');
+                this.value = ''; // Clean the input bar immediately
+                
+                // Temporarily disable the prompt box during simulation loop
+                terminalInput.disabled = true;
+
+                // Launch simulated technical sequence cascade
+                runTerminalSequence(0);
+            }
+        });
+
+        function appendLog(text, className = '') {
+            const entry = document.createElement('div');
+            entry.className = `log-entry ${className}`;
+            entry.textContent = text;
+            outputLog.appendChild(entry);
+            
+            // Force container scroll offset straight to the bottom
+            outputLog.scrollTop = outputLog.scrollHeight;
+        }
+
+        function runTerminalSequence(index) {
+            if (index < technicalPhrases.length) {
+                // Generate realistic timestamps for the data rows
+                const timestamp = new Date().toISOString().slice(11, 19);
+                appendLog(`[${timestamp}] INFO: ${technicalPhrases[index]}`, 'simulated-log');
+                
+                // Add staggered interval rendering between 100ms and 250ms for realistic velocity simulation
+                const deliberateDelay = Math.floor(Math.random() * 150) + 100;
+                setTimeout(() => runTerminalSequence(index + 1), deliberateDelay);
+            } else {
+                // Finish execution thread cleanly with standard Success log confirmation
+                setTimeout(() => {
+                    appendLog(">> TASK COMPLETE: SUCCESS <<", 'simulated-log');
+                    terminalInput.disabled = false;
+                    terminalInput.focus();
+                }, 300);
+            }
+        }
+    </script>
+</body>
+</html>
