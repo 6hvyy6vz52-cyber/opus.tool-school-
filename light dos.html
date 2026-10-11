@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Light DOS Terminal</title>
+    <style>
+        body {
+            background-color: black;
+            color: white;
+            font-family: 'Courier New', Courier, monospace;
+            padding: 20px;
+            margin: 0;
+            overflow-y: scroll;
+        }
+        #terminal {
+            width: 100%;
+            text-align: left;
+        }
+        #header {
+            white-space: pre;
+            margin-bottom: 10px;
+            color: #ffffff;
+            font-size: 12px;
+            line-height: 1.2;
+            text-align: left;
+        }
+        .separator {
+            color: red;
+            white-space: pre;
+            margin-bottom: 20px;
+            font-weight: bold;
+        }
+        #output {
+            white-space: pre-wrap;
+            line-height: 1.5;
+            text-align: left;
+        }
+        #input-line {
+            display: flex;
+            margin-top: 10px;
+            text-align: left;
+        }
+        #prompt {
+            margin-right: 10px;
+        }
+        #cmd {
+            background: transparent;
+            border: none;
+            color: white;
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 16px;
+            flex: 1;
+            outline: none;
+        }
+    </style>
+</head>
+<body>
+
+<div id="terminal">
+    <div id="header">██╗     ██╗ ██████╗ ██╗  ██╗████████╗   ██████╗  ██████╗ ███████╗
+██║     ██║██╔════╝ ██║  ██║╚══██╔══╝   ██╔══██╗██╔═══██╗██╔════╝
+██║     ██║██║  ███╗███████║   ██║      ██║  ██║██║   ██║███████╗
+██║     ██║██║   ██║██╔══██║   ██║      ██║  ██║██║   ██║╚════██║
+███████╗██║╚██████╔╝██║  ██║   ██║      ██████╔╝╚██████╔╝███████║
+╚══════╝╚═╝ ╚═════╝ ╚═╝  ╚═╝   ╚═╝      ╚═════╝  ╚═════╝ ╚══════╝</div>
+
+    <div class="separator">----------------------------------------------------------------</div>
+
+    <div id="output">LIGHT DOS Version 1.0.0
+Ready for input...
+</div>
+    
+    <div id="input-line">
+        <span id="prompt">C:\&gt;</span>
+        <input type="text" id="cmd" autofocus autocomplete="off" spellcheck="false">
+    </div>
+</div>
+
+<script>
+    const cmdInput = document.getElementById('cmd');
+    const output = document.getElementById('output');
+    const inputLine = document.getElementById('input-line');
+
+    document.addEventListener('click', () => {
+        cmdInput.focus();
+    });
+
+    cmdInput.addEventListener('keydown', function(e) {
+        if (e.key === 'Enter') {
+            const command = cmdInput.value;
+            cmdInput.value = ''; 
+            
+            inputLine.style.display = 'none';
+            output.innerHTML += `\nC:\\&gt;${command}\n`;
+            generateIPStuff();
+        }
+    });
+
+    function getRandomIP() {
+        return `${Math.floor(Math.random() * 256)}.${Math.floor(Math.random() * 256)}.${Math.floor(Math.random() * 256)}.${Math.floor(Math.random() * 256)}`;
+    }
+
+    function getRandomPort() {
+        return Math.floor(Math.random() * 65535);
+    }
+
+    function generateIPLogLine() {
+        const protocols = ['TCP', 'UDP', 'ICMP', 'HTTP', 'HTTPS'];
+        const statuses = ['ESTABLISHED', 'TIME_WAIT', 'SYN_SENT', 'LISTEN', 'CONNECTED'];
+        
+        const proto = protocols[Math.floor(Math.random() * protocols.length)];
+        const status = statuses[Math.floor(Math.random() * statuses.length)];
+        const bytes = Math.floor(Math.random() * 1500) + 40;
+        
+        const templates = [
+            `Ping statistics for ${getRandomIP()}: Reply received in ${Math.floor(Math.random() * 50) + 1}ms`,
+            `Routing packet: ${getRandomIP()}:${getRandomPort()} -&gt; ${getRandomIP()}:${getRandomPort()} [${proto}]`,
+            `Tracert hop ${Math.floor(Math.random() * 15) + 1}: ${getRandomIP()} (${Math.floor(Math.random() * 100)} ms)`,
+            `Connection state changed: Remote ${getRandomIP()} is now ${status}`,
+            `Network Adapter log: Broadcast received from ${getRandomIP()} | Size: ${bytes} bytes`
+        ];
+        
+        return templates[Math.floor(Math.random() * templates.length)];
+    }
+
+    function generateIPStuff() {
+        let lineCount = 1;
+        const maxLines = 1000;
+        
+        const interval = setInterval(() => {
+            if (lineCount <= maxLines) {
+                output.innerHTML += generateIPLogLine() + '\n';
+                lineCount++;
+                window.scrollTo(0, document.body.scrollHeight);
+            } else {
+                clearInterval(interval);
+                output.innerHTML += `\nsuccess\n`; // Changed spelling from 'sucse' to 'success'
+                
+                inputLine.style.display = 'flex';
+                cmdInput.focus();
+                window.scrollTo(0, document.body.scrollHeight);
+            }
+        }, 2); 
+    }
+</script>
+
+</body>
+</html>
